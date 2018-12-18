@@ -1,7 +1,17 @@
 package me.timulys.SpringBootCommunityWeb;
 
+import me.timulys.SpringBootCommunityWeb.domain.Board;
+import me.timulys.SpringBootCommunityWeb.domain.User;
+import me.timulys.SpringBootCommunityWeb.domain.enums.BoardType;
+import me.timulys.SpringBootCommunityWeb.repository.BoardRepository;
+import me.timulys.SpringBootCommunityWeb.repository.UserRepository;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+
+import java.time.LocalDateTime;
+import java.util.stream.IntStream;
 
 @SpringBootApplication
 public class SpringBootCommunityWebApplication {
@@ -10,5 +20,30 @@ public class SpringBootCommunityWebApplication {
 		SpringApplication.run(SpringBootCommunityWebApplication.class, args);
 	}
 
+	@Bean
+	public CommandLineRunner runner(UserRepository userRepository,
+									BoardRepository boardRepository) throws Exception {
+		return (args) -> {
+			User user = userRepository.save(User.builder()
+					.name("havi")
+					.password("test")
+					.email("test@gmail.com")
+					.createdDate(LocalDateTime.now())
+					.build()
+			);
+
+			IntStream.rangeClosed(1, 200).forEach(index -> {
+				boardRepository.save(Board.builder()
+						.title("게시글" + index)
+						.subTitle("순서" + index)
+						.content("콘텐츠")
+						.boardType(BoardType.free)
+						.createdDate(LocalDateTime.now())
+						.createdDate(LocalDateTime.now())
+						.user(user).build()
+				);
+			});
+		};
+	}
 }
 
