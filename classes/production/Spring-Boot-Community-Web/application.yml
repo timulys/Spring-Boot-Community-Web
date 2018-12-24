@@ -9,11 +9,6 @@ spring:
             facebook:
               client-id: 368294103977382
               client-secret: 07b7c8e89613a6b5f70ecc7a0389498f
-
-custom:
-  oauth2:
-    kakao:
-      client-id: 2ca8edacc2bcdc76601f4ea440a4a222
 #facebook :
 #  client :
 #    clientId : 368294103977382
