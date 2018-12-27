@@ -1,4 +1,19 @@
 spring:
+  datasource:
+    url: jdbc:mariadb://127.0.0.1:3306/rest
+    username: root
+    password: root
+    driver-class-name: org.mariadb.jdbc.Driver
+  jpa:
+    hibernate:
+    ddl-auto: create
+  h2:
+    console:
+      enabled: false
+    path: /console
+  devtools:
+    livereload:
+      enabled: true
   security:
       oauth2:
         client:

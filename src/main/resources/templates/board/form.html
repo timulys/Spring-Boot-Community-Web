@@ -14,7 +14,7 @@
         </div>
         <br/>
         <input id="board_idx" type="hidden" th:value="${board?.idx}"/>
-        <input id="board_create_date" type="hidden" th:value="${board?.createdDate}"/>
+        <input id="board_create_date" type="hidden" th:value="${board?.createdDate}"/> <!-- 1 -->
         <table class="table">
             <tr>
                 <th style="padding:13px 0 0 15px">게시판 선택</th>
@@ -61,5 +61,69 @@
         </div>
     </div>
     <div th:replace="layout/footer::footer"></div>
+
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:if="!${board?.idx}"> <!-- 2 -->
+        $('#insert').click(function() {
+            var jsonData = JSON.stringify({
+                title: $('#board_title').val(),
+                subTitle: $('#board_sub_title').val(),
+                content: $('#board_content').val(),
+                boardType: $('#board_type option:selected').val()
+            });
+            $.ajax({
+                url: "http://localhost:8081/api/boards",
+                type: "POST",
+                data: jsonData,
+                contentType: "application/json",
+                dataType: "json",
+                success: function() {
+                    alert("저장 성공!");
+                    location.href = "/board/list";
+                },
+                error: function() {
+                    alert("저장 실패!");
+                }
+            });
+        });
+    </script>
+    <script th:if="${board?.idx}"> <!-- 3 -->
+        $("#update").click(function() {
+            var jsonData = JSON.stringify({ <!-- 4 -->
+                title: $('#board_title').val(),
+                subTitle: $('#board_sub_title').val(),
+                content: $('#board_content').val(),
+                boardType: $('#board_type option:selected').val(),
+                createdDate: $("#board_create_date").val()
+            });
+            $.ajax({
+                url: "http://localhost:8081/api/boards/" + $("#board_idx").val(),
+                type: "PUT",
+                data: jsonData,
+                contentType: "application/json",
+                dataType: "json",
+                success: function() {
+                    alert("수정 성공!");
+                    location.href = "/board/list";
+                },
+                error: function() {
+                    alert("수정 실패!");
+                }
+            });
+        });
+        $("#delete").click(function() { <!-- 5 -->
+            $.ajax({
+                url: "http://localhost:8081/api/boards/" + $("#board_idx").val(),
+                type: "DELETE",
+                success: function() {
+                    alert("삭제 성공!");
+                    location.href = "/board/list";
+                },
+                error: function() {
+                    alert("삭제 실패!");
+                }
+            });
+        });
+    </script>
 </body>
 </html>
